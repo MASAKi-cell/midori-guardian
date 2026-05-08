@@ -1,0 +1,102 @@
+# midori-guardian
+
+観葉植物・家庭菜園の状態をリアルタイムに監視し、Amazon Bedrock による AI 診断・育成アドバイスをメールで自動通知するシステム。
+
+## アーキテクチャ
+
+```
+Raspberry Pi 4
+  ├── 土壌水分センサー
+  ├── 温湿度センサー
+  ├── 照度センサー
+  └── カメラ
+       │
+       ▼ MQTT
+AWS IoT Core
+       │
+       ▼
+AWS Step Functions
+  ├── Timestream にセンサーデータを保存
+  ├── S3 にカメラ画像を保存
+  ├── Amazon Bedrock で診断・アドバイス生成
+  └── Amazon SES でメール通知
+```
+
+## 技術スタック
+
+| レイヤー | 技術 |
+|----------|------|
+| エッジ（センサー収集） | Python on Raspberry Pi 4 |
+| IaC | AWS CDK (TypeScript) |
+| バックエンド | AWS Lambda (Node.js/TypeScript) |
+| メッセージング | AWS IoT Core (MQTT) |
+| オーケストレーション | AWS Step Functions |
+| AI 診断 | Amazon Bedrock |
+| センサーデータ保存 | Amazon Timestream |
+| 画像保存 | Amazon S3 |
+| メール通知 | Amazon SES |
+| CI | GitHub Actions |
+
+## ディレクトリ構成
+
+```
+midori-guardian/
+├── pi/          # Raspberry Pi 側（Python）
+│   └── sensors/ # センサー収集スクリプト
+├── cdk/         # AWS CDK + Lambda（TypeScript）
+│   ├── bin/     # CDK アプリエントリポイント
+│   ├── lib/     # スタック定義
+│   └── lambda/  # Lambda 関数ソース
+└── .github/
+    └── workflows/ # GitHub Actions
+```
+
+## 開発コマンド
+
+### CDK
+
+```bash
+cd cdk
+npm install          # 依存関係インストール
+npm run build        # TypeScript コンパイル
+npm run test         # CDK Assertions によるポリシーチェック
+npx cdk synth        # CloudFormation テンプレート生成・確認
+npx cdk deploy       # AWS へデプロイ
+npx cdk diff         # 差分確認
+```
+
+### Lambda ローカルテスト
+
+```bash
+cd cdk
+sam local invoke <FunctionName> -e events/sample.json
+```
+
+### Raspberry Pi（Python）
+
+```bash
+cd pi
+# パッケージマネージャーは未定（pip / uv）
+python sensors/collect.py
+```
+
+## CDK ポリシールール
+
+`cdk/test/` 配下に CDK Assertions でインフラのポリシー違反を検出するテストを整備する。
+
+チェック対象（予定）:
+- S3 バケットのパブリックアクセスブロックが有効であること
+- Lambda 関数に最小権限の IAM ロールが付与されていること
+- Timestream テーブルの暗号化が有効であること
+- IoT Core のポリシーが過剰な権限を持たないこと
+
+## データストア設計方針
+
+- **センサーデータ → Timestream**: 時系列クエリ・自動階層ストレージ（メモリ層→磁気層）に対応
+- **カメラ画像 → S3**: オブジェクトストレージで画像を Bedrock に渡す
+
+## 注意事項
+
+- AWS 認証情報（`~/.aws/credentials`）はコードに含めない
+- センサーの MQTT トピック名・IoT エンドポイントは環境変数または AWS Systems Manager Parameter Store で管理する
+- CDK デプロイ前に必ず `npx cdk diff` で差分を確認すること
