@@ -1,0 +1,40 @@
+# IoT 証明書（絶対にコミットしない）
+pi/certs/*.pem.crt
+pi/certs/*.pem.key
+pi/certs/*.pem
+
+# 環境変数・認証情報
+.env
+.env.*
+*.env
+
+# AWS CDK
+cdk/cdk.out/
+cdk/*.js
+cdk/*.d.ts
+cdk/node_modules/
+cdk/lambda/**/*.js
+cdk/lambda/**/*.d.ts
+
+# Node.js
+node_modules/
+npm-debug.log*
+
+# Python（Raspberry Pi）
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+.uv/
+dist/
+*.egg-info/
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+
+# Claude Code（ローカル設定）
+.claude/settings.local.json
