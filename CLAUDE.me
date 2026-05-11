@@ -100,3 +100,33 @@ python sensors/collect.py
 - AWS 認証情報（`~/.aws/credentials`）はコードに含めない
 - センサーの MQTT トピック名・IoT エンドポイントは環境変数または AWS Systems Manager Parameter Store で管理する
 - CDK デプロイ前に必ず `npx cdk diff` で差分を確認すること
+- ハードコードされた ARN・アカウント ID・エンドポイントをコードに含めない
+
+## デプロイ方針
+  - CDK デプロイは GitHub Actions から行う（main ブランチへの push をトリガー）
+  - AWS 認証は **OIDC（OpenID Connect）** を使用し、長期 IAM キーは GitHub Secrets に置かない
+  - デプロイ前に `cdk diff` を実行し、変更内容を確認してから `cdk deploy` する
+  - 詳細なセットアップ手順は `.claude/cdk-github-actions-deploy.md` を参照
+
+## シークレット管理方針
+`.env` は使用しない。機密情報・設定値は以下のように管理する。
+
+| 情報 | 保管場所 |
+|------|----------|
+| IoT 証明書（.pem） | Pi のローカルファイルシステムに手動配置。リポジトリに含めない |
+| IoT エンドポイント・設定値 | AWS Systems Manager Parameter Store |
+| Lambda の認証情報 | IAM 実行ロールで解決（明示的なキー不要） |
+| GitHub Actions の AWS 認証 | OIDC ロール経由（GitHub Secrets にキーを置かない） |
+| Pi から AWS へのアクセス | IoT Credentials Provider で一時認証情報を取得（長期 IAM キー不要） |
+| SES 送信先メールアドレス | AWS Systems Manager Parameter Store |
+
+
+## 秘密情報の扱い
+- 秘密情報を含む可能性があるファイルは、読まない・開かない・表示しない・要約しない・編集しないこと。
+- 以下のようなファイルは機密扱いとし、アクセスしないこと:
+  - 環境変数ファイル: .env, .env.*, .envrc
+  - 証明書・鍵ファイル: *.pem, *.key, *.p12 ...
+  - クラウド認証: ~/.aws/**, ~/.config/gcloud/** ...
+- 実装上必要な場合でも、秘密の値そのものは参照せず、環境変数名だけを前提に進めること。
+- 秘密情報の値をチャットに貼るよう要求しないこと。
+- 秘密情報の一部（先頭・末尾N文字、マスク済み表示、ハッシュ値など）も表示しないこと。

@@ -11,11 +11,21 @@
       "Read(~/.zshrc)"
     ],
     "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./.envrc)",
+      "Read(./secrets/**)",
+      "Read(./**/*.pem)",
+      "Read(./**/*.key)",
+      "Read(./**/*.p12)",
+      "Bash(cat .env*)",
+      "Bash(head .env*)",
+      "Bash(tail .env*)",
+      "Read(~/.aws/**)",
+      "Read(~/.config/gcloud/**)",
       "Bash(gh repo delete*)",
       "Bash(gh repo archive*)",
-      "Bash(gh pr close*)",
-      "Read(~/.aws/credentials)",
-      "Read(~/.aws/.env)"
+      "Bash(gh pr close*)"
     ]
   },
   "sandbox": {
