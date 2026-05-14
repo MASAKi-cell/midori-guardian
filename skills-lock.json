@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "skills": {
+    "amazon-bedrock": {
+      "source": "aws/agent-toolkit-for-aws",
+      "sourceType": "github",
+      "skillPath": "plugins/aws-core/skills/amazon-bedrock/SKILL.md",
+      "computedHash": "7b74fe3402d241789763a18b0fd30b8a151147388166b179d455c32fc6e5fb5b"
+    },
+    "aws-cdk": {
+      "source": "aws/agent-toolkit-for-aws",
+      "sourceType": "github",
+      "skillPath": "plugins/aws-core/skills/aws-cdk/SKILL.md",
+      "computedHash": "d7199ae029b210464a692904ed969f5f3f6e1095b1b29f2ba08bda47c2d85424"
+    },
+    "aws-serverless": {
+      "source": "aws/agent-toolkit-for-aws",
+      "sourceType": "github",
+      "skillPath": "plugins/aws-core/skills/aws-serverless/SKILL.md",
+      "computedHash": "71def884b7e0277e2ba0d9a0ac47d5a55a3904d62f0bfdbbc03cec5cef1e5b55"
+    }
+  }
+}
