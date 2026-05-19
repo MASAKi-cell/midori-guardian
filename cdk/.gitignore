@@ -8,6 +8,11 @@ pi/certs/*.pem
 .env.*
 *.env
 
+*.js
+!jest.config.js
+*.d.ts
+node_modules
+
 # AWS CDK
 cdk/cdk.out/
 cdk/*.js
