@@ -15,8 +15,8 @@ node_modules
 
 # AWS CDK
 cdk/cdk.out/
-cdk/*.js
-cdk/*.d.ts
+cdk/**/*.js
+cdk/**/*.d.ts
 cdk/node_modules/
 cdk/lambda/**/*.js
 cdk/lambda/**/*.d.ts
