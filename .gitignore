@@ -14,7 +14,7 @@ pi/certs/*.pem
 node_modules
 
 # AWS CDK
-cdk/cdk.out/
+cdk/**/cdk.out/
 cdk/**/*.js
 cdk/**/*.d.ts
 cdk/node_modules/
