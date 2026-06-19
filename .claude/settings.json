@@ -24,20 +24,29 @@
       "Read(~/.aws/**)",
       "Read(~/.config/gcloud/**)",
       "Bash(gh repo delete*)",
-      "Bash(gh repo archive*)",
-      "Bash(gh pr close*)"
+      "Bash(gh repo archive*)"
     ]
+  },
+  "enabledPlugins": {
+    "agent-skills@addy-agent-skills": true
   },
   "sandbox": {
     "enabled": true,
     "autoAllowBashIfSandboxed": true,
-    "filesystem": {
-      "allowWrite": [".claude/**"],
-      "denyRead": ["~/.ssh/**"]
-    },
     "network": {
-      "deniedDomains": ["169.254.169.254", "metadata.google.internal"],
+      "deniedDomains": [
+        "169.254.169.254",
+        "metadata.google.internal"
+      ],
       "allowLocalBinding": true
+    },
+    "filesystem": {
+      "allowWrite": [
+        ".claude/**"
+      ],
+      "denyRead": [
+        "~/.ssh/**"
+      ]
     }
   }
 }
