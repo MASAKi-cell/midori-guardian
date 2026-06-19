@@ -1,0 +1,8 @@
+packages:
+  - "cdk"
+
+allowBuilds:
+  unrs-resolver: false
+
+onlyBuiltDependencies:
+  - unrs-resolver

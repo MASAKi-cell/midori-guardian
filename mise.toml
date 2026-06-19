@@ -1,0 +1,27 @@
+[tools]
+node = "24.13.0"
+pnpm = "11.8.0"
+
+[tasks.build]
+run = "pnpm -C cdk run build"
+description = "TypeScript をコンパイル"
+
+[tasks.test]
+run = "pnpm -C cdk run test"
+description = "Jest テストを実行"
+
+[tasks.synth]
+run = "pnpm -C cdk exec cdk synth"
+description = "CDK スタックを CloudFormation テンプレートに合成"
+
+[tasks.diff]
+run = "pnpm -C cdk exec cdk diff"
+description = "デプロイ前にスタックの差分を確認"
+
+[tasks.deploy]
+run = "pnpm -C cdk exec cdk deploy --all"
+description = "全スタックをデプロイ"
+
+[tasks.bootstrap]
+run = "pnpm -C cdk exec cdk bootstrap"
+description = "CDK ツールキットを初期セットアップ（初回のみ）"
