@@ -1,16 +1,45 @@
 {
-  "formatter": "prettier",
   "file_scan_exclusions": [
     "**/node_modules",
     "**/dist",
     "**/build",
     "**/*.module.scss.d.ts",
-    "**/*.git",
+    "**/*.git"
   ],
   "inlay_hints": {
     "enabled": true,
     "show_type_hints": true,
     "show_parameter_hints": true,
-    "show_other_hints": true,
+    "show_other_hints": true
   },
+  "languages": {
+    "TypeScript": {
+      "formatter": {
+        "language_server": {
+          "name": "biome"
+        }
+      }
+    },
+    "JavaScript": {
+      "formatter": {
+        "language_server": {
+          "name": "biome"
+        }
+      }
+    },
+    "JSON": {
+      "formatter": {
+        "language_server": {
+          "name": "biome"
+        }
+      }
+    },
+    "Python": {
+      "formatter": {
+        "language_server": {
+          "name": "ruff"
+        }
+      }
+    }
+  }
 }

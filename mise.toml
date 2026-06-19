@@ -1,6 +1,27 @@
 [tools]
 node = "24.13.0"
 pnpm = "11.8.0"
+ruff = "latest"
+
+[tasks.lint]
+run = "pnpm exec biome lint ."
+description = "Biome で TypeScript を lint"
+
+[tasks.format]
+run = "pnpm exec biome format --write ."
+description = "Biome で TypeScript を format"
+
+[tasks.check]
+run = "pnpm exec biome check --write ."
+description = "Biome で lint + format を一括実行"
+
+[tasks.lint-py]
+run = "ruff check pi/"
+description = "ruff で Python を lint"
+
+[tasks.format-py]
+run = "ruff format pi/"
+description = "ruff で Python を format"
 
 [tasks.build]
 run = "pnpm -C cdk run build"

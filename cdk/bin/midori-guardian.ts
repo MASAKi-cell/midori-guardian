@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import * as cdk from "aws-cdk-lib/core";
-import { MidoriGuardianStack } from "../lib/midori-guardian-stack";
 import { IotStack } from "../lib/iot-stack";
+import { MidoriGuardianStack } from "../lib/midori-guardian-stack";
 
 const app = new cdk.App();
 
