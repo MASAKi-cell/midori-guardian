@@ -80,6 +80,34 @@ cd pi
 python sensors/collect.py
 ```
 
+## トークン最適化
+
+### 組み込みツール優先（最優先）
+
+Bash 経由のシェルコマンドより Claude Code 組み込みツールの方がトークン効率が良い。以下の対応で使い分けること：
+
+| 操作 | 使うツール | 禁止コマンド |
+|---|---|---|
+| ファイル読み込み | `Read` | `cat`, `head`, `tail` |
+| ファイル・パス検索 | `Glob` | `ls`, `find` |
+| 文字列検索 | `Grep` | `grep` |
+
+Bash は上記で対応できない操作（ビルド・テスト・git・デプロイ等）に限定する。
+
+### RTK（シェル出力圧縮）
+
+[RTK (Rust Token Killer)](https://github.com/rtk-ai/rtk) を導入。Bash を使う場合はシェルコマンドの出力を自動圧縮し、トークン消費を削減する。
+`rtk init -g` により Claude Code の Bash フックが設定されており、コマンドは自動的に RTK 経由で実行される。
+明示的に RTK を使う場合は以下のコマンドを使用すること：
+
+```bash
+rtk git status      # git status の圧縮版
+rtk git diff        # git diff の圧縮版
+rtk git log         # git log の圧縮版
+rtk tsc             # TypeScript コンパイルエラーの圧縮版
+rtk gain            # トークン削減統計の確認
+```
+
 ## CDK ポリシールール
 
 `cdk/test/` 配下に CDK Assertions でインフラのポリシー違反を検出するテストを整備する。
