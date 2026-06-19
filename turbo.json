@@ -1,0 +1,17 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "tasks": {
+    "build": {
+      "inputs": ["src/**/*.ts", "lib/**/*.ts", "bin/**/*.ts", "tsconfig.json", "package.json"],
+      "outputs": ["dist/**"]
+    },
+    "test": {
+      "inputs": ["lib/**/*.ts", "test/**/*.ts", "jest.config.js", "tsconfig.json"],
+      "outputs": []
+    },
+    "lint": {
+      "inputs": ["**/*.ts", "**/*.js", "../../biome.json"],
+      "outputs": []
+    }
+  }
+}

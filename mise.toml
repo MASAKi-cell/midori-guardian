@@ -4,8 +4,8 @@ pnpm = "11.8.0"
 ruff = "latest"
 
 [tasks.lint]
-run = "pnpm exec biome lint ."
-description = "Biome で TypeScript を lint"
+run = "pnpm exec turbo run lint"
+description = "Biome で TypeScript を lint（Turbo キャッシュ付き）"
 
 [tasks.format]
 run = "pnpm exec biome format --write ."
@@ -24,12 +24,12 @@ run = "ruff format pi/"
 description = "ruff で Python を format"
 
 [tasks.build]
-run = "pnpm -C cdk run build"
-description = "TypeScript をコンパイル"
+run = "pnpm exec turbo run build"
+description = "TypeScript をコンパイル（Turbo キャッシュ付き）"
 
 [tasks.test]
-run = "pnpm -C cdk run test"
-description = "Jest テストを実行"
+run = "pnpm exec turbo run test"
+description = "Jest テストを実行（Turbo キャッシュ付き）"
 
 [tasks.synth]
 run = "pnpm -C cdk exec cdk synth"
