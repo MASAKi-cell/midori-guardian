@@ -5,7 +5,7 @@ ruff = "latest"
 
 [tasks.lint]
 run = "pnpm exec turbo run lint"
-description = "Biome で TypeScript を lint（Turbo キャッシュ付き）"
+description = "Biome で TypeScript を lint"
 
 [tasks.format]
 run = "pnpm exec biome format --write ."
@@ -25,11 +25,11 @@ description = "ruff で Python を format"
 
 [tasks.build]
 run = "pnpm exec turbo run build"
-description = "TypeScript をコンパイル（Turbo キャッシュ付き）"
+description = "TypeScript をコンパイル"
 
 [tasks.test]
 run = "pnpm exec turbo run test"
-description = "Jest テストを実行（Turbo キャッシュ付き）"
+description = "Jest テストを実行"
 
 [tasks.synth]
 run = "pnpm -C cdk exec cdk synth"
@@ -45,4 +45,52 @@ description = "全スタックをデプロイ"
 
 [tasks.bootstrap]
 run = "pnpm -C cdk exec cdk bootstrap"
-description = "CDK ツールキットを初期セットアップ（初回のみ）"
+description = "CDK ツールキットを初期セットアップ"
+
+# ── IoT 初回セットアップ ──────────────────────────────────────────────────────
+
+[vars]
+AWS_PROFILE = "company-dev"
+AWS_REGION  = "ap-northeast-1"
+THING_NAME  = "midori-pi-001"
+POLICY_NAME = "MidoriPiPolicy"
+SECRET_ID   = "iot/midori-pi-001/certificate"
+CERT_TMP    = "/tmp/midori-cert-output.json"
+
+[tasks."iot:cert-create"]
+description = "証明書を発行して Secrets Manager に格納し Thing・Policy にアタッチ"
+run = """
+set -euo pipefail
+
+echo "=== 1. 証明書発行 ==="
+aws iot create-keys-and-certificate \
+  --set-as-active \
+  --profile {{vars.AWS_PROFILE}} \
+  --region  {{vars.AWS_REGION}} > {{vars.CERT_TMP}}
+
+echo "=== 2. Secrets Manager に格納 ==="
+aws secretsmanager put-secret-value \
+  --secret-id     "{{vars.SECRET_ID}}" \
+  --secret-string file://{{vars.CERT_TMP}} \
+  --profile {{vars.AWS_PROFILE}} \
+  --region  {{vars.AWS_REGION}}
+
+echo "=== 3. Thing・Policy にアタッチ ==="
+CERT_ARN=$(jq -r '.certificateArn' {{vars.CERT_TMP}})
+aws iot attach-thing-principal \
+  --thing-name {{vars.THING_NAME}} \
+  --principal  "$CERT_ARN" \
+  --profile {{vars.AWS_PROFILE}} \
+  --region  {{vars.AWS_REGION}}
+aws iot attach-policy \
+  --policy-name {{vars.POLICY_NAME}} \
+  --target      "$CERT_ARN" \
+  --profile {{vars.AWS_PROFILE}} \
+  --region  {{vars.AWS_REGION}}
+
+echo "完了: 証明書は {{vars.CERT_TMP}} に保存されています"
+"""
+
+[tasks."iot:cert-transfer"]
+description = "証明書を Pi に転送（PI_IP 環境変数が必要: PI_IP=x.x.x.x mise run iot:cert-transfer）"
+run = "scp {{vars.CERT_TMP}} pi@${PI_IP}:~/certs/"

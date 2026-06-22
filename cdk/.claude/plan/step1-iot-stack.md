@@ -2,8 +2,7 @@
 
 ## 目的
 
-AWS IoT Core の基盤リソース（Thing・Policy・Role Alias）と Secrets Manager シークレットを `IotStack` として CDK 化する。
-証明書はプライベートキーが CDK/CloudFormation から取得不可のため、CDK デプロイ後に CLI で手動発行する。
+AWS IoT Core の基盤リソース（Thing・Policy・Role Alias）と Secrets Manager シークレットを `IotStack` として CDK 化する。証明書はプライベートキーが CDK/CloudFormation から取得不可のため、CDK デプロイ後に CLI で手動発行する。
 発行した証明書・秘密鍵は Secrets Manager に格納し、Pi は IoT 認証情報プロバイダー経由で取得した一時 IAM 認証情報を使って参照できるようにする。
 
 ---

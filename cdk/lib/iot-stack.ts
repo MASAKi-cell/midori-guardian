@@ -9,6 +9,7 @@ const TOPIC = "midori/sensor/data";
 const POLICY_NAME = "MidoriPiPolicy";
 const ROLE_ALIAS_NAME = "MidoriPiRoleAlias";
 const SECRET_NAME = "iot/midori-pi-001/certificate";
+const IOT_ROLE_NAME = "MidoriPiIotRole"
 
 export class IotStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -24,7 +25,7 @@ export class IotStack extends cdk.Stack {
     });
 
     const iotRole = new iam.Role(this, "MidoriPiIotRole", {
-      roleName: "MidoriPiIotRole",
+      roleName: IOT_ROLE_NAME,
       assumedBy: new iam.ServicePrincipal("credentials.iot.amazonaws.com"),
     });
 
