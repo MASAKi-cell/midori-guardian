@@ -3,6 +3,15 @@ node = "24.13.0"
 pnpm = "11.8.0"
 ruff = "latest"
 
+[env]
+AWS_PROFILE = "company-dev"
+AWS_REGION  = "ap-northeast-1"
+THING_NAME  = "midori-pi-001"
+POLICY_NAME = "MidoriPiPolicy"
+SECRET_ID   = "iot/midori-pi-001/certificate"
+CERT_TMP    = "/tmp/midori-cert-output.json"
+
+
 [tasks.lint]
 run = "pnpm exec turbo run lint"
 description = "Biome で TypeScript を lint"
@@ -32,15 +41,15 @@ run = "pnpm exec turbo run test"
 description = "Jest テストを実行"
 
 [tasks.synth]
-run = "pnpm -C cdk exec cdk synth"
+run = "pnpm -C cdk exec cdk --profile {{env.AWS_PROFILE}} synth"
 description = "CDK スタックを CloudFormation テンプレートに合成"
 
 [tasks.diff]
-run = "pnpm -C cdk exec cdk diff"
+run = "pnpm -C cdk exec cdk --profile {{env.AWS_PROFILE}} diff"
 description = "デプロイ前にスタックの差分を確認"
 
 [tasks.deploy]
-run = "pnpm -C cdk exec cdk deploy --all"
+run = "pnpm -C cdk exec cdk deploy --profile {{env.AWS_PROFILE}}"
 description = "全スタックをデプロイ"
 
 [tasks.bootstrap]
@@ -49,48 +58,39 @@ description = "CDK ツールキットを初期セットアップ"
 
 # ── IoT 初回セットアップ ──────────────────────────────────────────────────────
 
-[vars]
-AWS_PROFILE = "company-dev"
-AWS_REGION  = "ap-northeast-1"
-THING_NAME  = "midori-pi-001"
-POLICY_NAME = "MidoriPiPolicy"
-SECRET_ID   = "iot/midori-pi-001/certificate"
-CERT_TMP    = "/tmp/midori-cert-output.json"
-
 [tasks."iot:cert-create"]
 description = "証明書を発行して Secrets Manager に格納し Thing・Policy にアタッチ"
 run = """
 set -euo pipefail
-
-echo "=== 1. 証明書発行 ==="
+echo "--- 1. 証明書発行 ---"
 aws iot create-keys-and-certificate \
   --set-as-active \
-  --profile {{vars.AWS_PROFILE}} \
-  --region  {{vars.AWS_REGION}} > {{vars.CERT_TMP}}
+  --profile {{env.AWS_PROFILE}} \
+  --region  {{env.AWS_REGION}} > {{env.CERT_TMP}}
 
-echo "=== 2. Secrets Manager に格納 ==="
+echo "--- 2. Secrets Manager に格納 ---"
 aws secretsmanager put-secret-value \
-  --secret-id     "{{vars.SECRET_ID}}" \
-  --secret-string file://{{vars.CERT_TMP}} \
-  --profile {{vars.AWS_PROFILE}} \
-  --region  {{vars.AWS_REGION}}
+  --secret-id     "{{env.SECRET_ID}}" \
+  --secret-string file://{{env.CERT_TMP}} \
+  --profile {{env.AWS_PROFILE}} \
+  --region  {{env.AWS_REGION}}
 
-echo "=== 3. Thing・Policy にアタッチ ==="
-CERT_ARN=$(jq -r '.certificateArn' {{vars.CERT_TMP}})
+echo "--- 3. Thing・Policy にアタッチ ---"
+CERT_ARN=$(jq -r '.certificateArn' {{env.CERT_TMP}})
 aws iot attach-thing-principal \
-  --thing-name {{vars.THING_NAME}} \
+  --thing-name {{env.THING_NAME}} \
   --principal  "$CERT_ARN" \
-  --profile {{vars.AWS_PROFILE}} \
-  --region  {{vars.AWS_REGION}}
+  --profile {{env.AWS_PROFILE}} \
+  --region  {{env.AWS_REGION}}
 aws iot attach-policy \
-  --policy-name {{vars.POLICY_NAME}} \
+  --policy-name {{env.POLICY_NAME}} \
   --target      "$CERT_ARN" \
-  --profile {{vars.AWS_PROFILE}} \
-  --region  {{vars.AWS_REGION}}
+  --profile {{env.AWS_PROFILE}} \
+  --region  {{env.AWS_REGION}}
 
-echo "完了: 証明書は {{vars.CERT_TMP}} に保存されています"
+echo "完了: 証明書は {{env.CERT_TMP}} に保存されています"
 """
 
 [tasks."iot:cert-transfer"]
 description = "証明書を Pi に転送（PI_IP 環境変数が必要: PI_IP=x.x.x.x mise run iot:cert-transfer）"
-run = "scp {{vars.CERT_TMP}} pi@${PI_IP}:~/certs/"
+run = "scp {{env.CERT_TMP}} pi@${PI_IP}:~/certs/"
