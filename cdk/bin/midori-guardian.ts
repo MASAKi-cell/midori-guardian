@@ -5,11 +5,11 @@ import { MidoriGuardianStack } from "../lib/midori-guardian-stack";
 
 const app = new cdk.App();
 
-new MidoriGuardianStack(app, "MidoriGuardianStack");
+const env = {
+  account: process.env.CDK_DEFAULT_ACCOUNT,
+  region: process.env.CDK_DEFAULT_REGION,
+};
 
-new IotStack(app, "IotStack", {
-  env: {
-    account: process.env.CDK_DEFAULT_ACCOUNT,
-    region: process.env.REGION,
-  },
-});
+new MidoriGuardianStack(app, "MidoriGuardianStack", { env });
+
+new IotStack(app, "IotStack", { env });

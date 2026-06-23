@@ -4,7 +4,7 @@ pnpm = "11.8.0"
 ruff = "latest"
 
 [env]
-AWS_PROFILE = "company-dev"
+AWS_PROFILE = "Policy_for_kokorozashiAWS-291138884554"
 AWS_REGION  = "ap-northeast-1"
 THING_NAME  = "midori-pi-001"
 POLICY_NAME = "MidoriPiPolicy"
@@ -40,6 +40,10 @@ description = "TypeScript をコンパイル"
 run = "pnpm exec turbo run test"
 description = "Jest テストを実行"
 
+[tasks.install]
+run = "pnpm install && pnpm -C cdk install"
+description = "ルートおよび cdk の依存関係をインストール"
+
 [tasks.synth]
 run = "pnpm -C cdk exec cdk --profile {{env.AWS_PROFILE}} synth"
 description = "CDK スタックを CloudFormation テンプレートに合成"
@@ -53,7 +57,7 @@ run = "pnpm -C cdk exec cdk deploy --profile {{env.AWS_PROFILE}}"
 description = "全スタックをデプロイ"
 
 [tasks.bootstrap]
-run = "pnpm -C cdk exec cdk bootstrap"
+run = "pnpm -C cdk exec cdk bootstrap --profile {{env.AWS_PROFILE}}"
 description = "CDK ツールキットを初期セットアップ"
 
 # ── IoT 初回セットアップ ──────────────────────────────────────────────────────

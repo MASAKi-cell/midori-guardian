@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      aws-cdk:
+        specifier: 2.1111.0
+        version: 2.1111.0
     devDependencies:
       '@biomejs/biome':
         specifier: 2.5.0
@@ -31,8 +35,8 @@ importers:
         specifier: ^24.10.1
         version: 24.13.2
       aws-cdk:
-        specifier: 2.1111.0
-        version: 2.1111.0
+        specifier: 2.1128.1
+        version: 2.1128.1
       jest:
         specifier: ^30
         version: 30.4.2(@types/node@24.13.2)(ts-node@10.9.2(@types/node@24.13.2)(typescript@5.9.3))
@@ -700,6 +704,11 @@ packages:
 
   aws-cdk@2.1111.0:
     resolution: {integrity: sha512-69AVF04cxbAhYzmeJYtUF5bs6ruNnH05EQZJfjadk5Lpg+HVaJY2NjG/2qgsMmKrfRgvLet73Ir8ehVlAaaGng==}
+    engines: {node: '>= 18.0.0'}
+    hasBin: true
+
+  aws-cdk@2.1128.1:
+    resolution: {integrity: sha512-y9OHn5/BOcIiq409vPvpypMIr7/8M1ScFe8IkFMSCN1/GI/5c73fQ4pfzNq+VDkj86T5zxs7BQ1qU2lQQytdXA==}
     engines: {node: '>= 18.0.0'}
     hasBin: true
 
@@ -2253,6 +2262,8 @@ snapshots:
       constructs: 10.6.0
 
   aws-cdk@2.1111.0: {}
+
+  aws-cdk@2.1128.1: {}
 
   babel-jest@30.4.1(@babel/core@7.29.7):
     dependencies:

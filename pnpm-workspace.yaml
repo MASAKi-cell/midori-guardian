@@ -4,5 +4,8 @@ packages:
 allowBuilds:
   unrs-resolver: false
 
+minimumReleaseAgeExclude:
+  - aws-cdk@2.1128.1
+
 onlyBuiltDependencies:
   - unrs-resolver
