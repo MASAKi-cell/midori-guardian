@@ -13,15 +13,15 @@ CERT_TMP    = "/tmp/midori-cert-output.json"
 
 
 [tasks.lint]
-run = "pnpm exec turbo run lint"
+run = "rtk pnpm exec turbo run lint"
 description = "Biome で TypeScript を lint"
 
 [tasks.format]
-run = "pnpm exec biome format --write ."
+run = "rtk pnpm exec biome format --write ."
 description = "Biome で TypeScript を format"
 
 [tasks.check]
-run = "pnpm exec biome check --write ."
+run = "rtk pnpm exec biome check --write ."
 description = "Biome で lint + format を一括実行"
 
 [tasks.lint-py]
@@ -33,31 +33,35 @@ run = "ruff format pi/"
 description = "ruff で Python を format"
 
 [tasks.build]
-run = "pnpm exec turbo run build"
+run = "rtk pnpm exec turbo run build"
 description = "TypeScript をコンパイル"
 
 [tasks.test]
-run = "pnpm exec turbo run test"
+run = "rtk pnpm exec turbo run test"
 description = "Jest テストを実行"
 
 [tasks.install]
-run = "pnpm install && pnpm -C cdk install"
+run = "rtk pnpm install && rtk pnpm -C cdk install"
 description = "ルートおよび cdk の依存関係をインストール"
 
+[tasks.list]
+run = "rtk pnpm -C cdk exec cdk list --profile {{env.AWS_PROFILE}}"
+description = "CDK スタック一覧を表示"
+
 [tasks.synth]
-run = "pnpm -C cdk exec cdk --profile {{env.AWS_PROFILE}} synth"
+run = "rtk pnpm -C cdk exec cdk --profile {{env.AWS_PROFILE}} synth"
 description = "CDK スタックを CloudFormation テンプレートに合成"
 
 [tasks.diff]
-run = "pnpm -C cdk exec cdk --profile {{env.AWS_PROFILE}} diff"
+run = "rtk pnpm -C cdk exec cdk --profile {{env.AWS_PROFILE}} diff"
 description = "デプロイ前にスタックの差分を確認"
 
 [tasks.deploy]
-run = "pnpm -C cdk exec cdk deploy --profile {{env.AWS_PROFILE}}"
+run = "rtk pnpm -C cdk exec cdk deploy --profile {{env.AWS_PROFILE}}"
 description = "全スタックをデプロイ"
 
 [tasks.bootstrap]
-run = "pnpm -C cdk exec cdk bootstrap --profile {{env.AWS_PROFILE}}"
+run = "rtk pnpm -C cdk exec cdk bootstrap --profile {{env.AWS_PROFILE}}"
 description = "CDK ツールキットを初期セットアップ"
 
 # ── IoT 初回セットアップ ──────────────────────────────────────────────────────
