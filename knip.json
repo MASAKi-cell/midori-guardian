@@ -1,0 +1,14 @@
+{
+  "$schema": "https://unpkg.com/knip@latest/schema.json",
+  "workspaces": {
+    ".": {
+      "entry": [],
+      "project": []
+    },
+    "cdk": {
+      "entry": ["bin/*.ts"],
+      "project": ["bin/**/*.ts", "lib/**/*.ts"]
+    }
+  },
+  "ignore": ["cdk/dist/**", "cdk/node_modules/**"]
+}

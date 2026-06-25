@@ -24,6 +24,10 @@ description = "Biome で TypeScript を format"
 run = "rtk pnpm exec biome check --write ."
 description = "Biome で lint + format を一括実行"
 
+[tasks.knip]
+run = "rtk pnpm exec knip"
+description = "未使用コード・依存関係を検出"
+
 [tasks.lint-py]
 run = "ruff check pi/"
 description = "ruff で Python を lint"

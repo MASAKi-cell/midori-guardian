@@ -12,6 +12,7 @@ pi/certs/*.pem
 !jest.config.js
 *.d.ts
 node_modules
+.pnpm-store
 
 # AWS CDK
 cdk/**/cdk.out/
