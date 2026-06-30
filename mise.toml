@@ -6,6 +6,8 @@ ruff = "latest"
 [env]
 AWS_PROFILE = "Policy_for_kokorozashiAWS-291138884554"
 AWS_REGION  = "ap-northeast-1"
+TAG_KEY     = "Owner"
+TAG_NAME    = "masaki"
 THING_NAME  = "midori-pi-001"
 POLICY_NAME = "MidoriPiPolicy"
 SECRET_ID   = "iot/midori-pi-001/certificate"
@@ -63,6 +65,10 @@ description = "デプロイ前にスタックの差分を確認"
 [tasks.deploy]
 run = "rtk pnpm -C cdk exec cdk deploy --profile {{env.AWS_PROFILE}}"
 description = "全スタックをデプロイ"
+
+[tasks.login]
+run = "aws sso login --profile {{env.AWS_PROFILE}}"
+description = "AWS SSO にログイン"
 
 [tasks.bootstrap]
 run = "rtk pnpm -C cdk exec cdk bootstrap --profile {{env.AWS_PROFILE}}"
